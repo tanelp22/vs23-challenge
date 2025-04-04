@@ -1,7 +1,12 @@
-const fs = require("fs/promises");
-const bodyParser = require("body-parser");
-const path = require("path");
-const express = require("express");
+import DataConroller from "./controllers/data.controller.js";
+import bodyParser from "body-parser";
+import path from "path";
+import express from "express";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
@@ -16,24 +21,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/meals", (req, res) => {
-  const filePath = path.join(__dirname, "./data/", "meals.json");
-
-  fs.readFile(filePath, "utf8", (err, jsonData) => {
-    if (err) {
-      console.error("Error reading JSON file:", err);
-      return res.status(500).json({ error: "Failed to read data" });
-    }
-    try {
-      const data = JSON.parse(jsonData);
-      console.log(data);
-      res.json(data);
-    } catch (parseError) {
-      console.error("Error parsing JSON:", parseError);
-      res.status(500).json({ error: "Invalid JSON format" });
-    }
-  });
-});
+app.get("/meals", DataConroller.loadMeals());
 
 app.use((req, res) => {
   if (req.method === "OPTIONS") {
