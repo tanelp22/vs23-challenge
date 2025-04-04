@@ -20,7 +20,7 @@ const MealItem = (props) => {
           <p className="meal-item-description">{props.meal.description}</p>
         </div>
         <p>
-          <Button textOnly={false} />
+          <Button textOnly={false} meal={props.meal}  />
         </p>
       </article>
     </li>
